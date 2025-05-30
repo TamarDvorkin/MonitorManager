@@ -24,6 +24,8 @@ private:
     ICollector* CreateLinuxCollector();
     ICollector* CreateWindowsCollector();
 
+    //about collecting os data :estions/63166/how-to-determine-cpu-and-memory-consumption-from-inside-a-process
+
 };
 
 #endif

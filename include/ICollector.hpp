@@ -6,7 +6,7 @@ class ICollector
 public:
     ICollector(); //ctor
     virtual ~ICollector() = 0;
-    void virtual CollectData() = 0;
+    std::string virtual CollectData() = 0;
 
 
 private:

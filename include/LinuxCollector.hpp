@@ -2,13 +2,14 @@
 #define _LinuxCollector_HPP_
 
 #include "ICollector.hpp" //collecting data
+#include <string>
 
 class LinuxCollector : ICollector
 {
 public:
     LinuxCollector();
     ~LinuxCollector()  noexcept override = default; 
-    void CollectData() override;
+    std::string CollectData() override;
 
 
 private:

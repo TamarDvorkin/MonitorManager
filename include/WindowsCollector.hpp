@@ -7,20 +7,20 @@
 #include <functional> //std::function
 #include <chrono>     //time calculations
 //windows specific includes
-#ifdef _WIN32
+//#ifdef _WIN32
 #include <windows.h>
 #include <pdh.h>
 #pragma comment(lib, "pdh.lib") //link with pdh.lib
 
 #include "ICollector.hpp"
 
-struct PdhQuetDeleter
+struct PdhQuetDeleter //PDH: Performance Data Helper.
 {
     void operator()(PDH_HQUERY queryHandle) const
     {
         if(nullptr!= queryHandle)// PDH handles are typically NULL or 0 if not successfully opened.
         {
-            PdhCloseQuert(queryHandle);//cleans all counters added to this query
+            PdhCloseQuery(queryHandle);//cleans all counters added to this query
         }
 
     }
@@ -31,9 +31,9 @@ struct PdhQuetDeleter
 class WindowsCollector : ICollector
 {
 public: //TODO:: CHECK FUNCTIONS I NEED to collect data on both os
-    WindowsCollector(); //initialize PDH queries
+    WindowsCollector(); //initialize PDH queries // call initializePdhCounters
     ~WindowsCollector() noexcept override = default; 
-    void CollectData() override;
+    std::string CollectData() override;
 
 
 
@@ -52,22 +52,32 @@ PDH_HCOUNTER m_diskReadByteSecCounter=NULL;// Counter for disk read bytes per se
 PDH_HCOUNTER m_DskWriteByteSecCoun=NULL;
 
 bool m_isFirstRead= true;
-std:chrono::steady_clock::time_pint m_lastCollectTime;// Timestamp of the previous data collection
+std::chrono::steady_clock::time_point m_lastCollectTime;// Timestamp of the previous data collection
 
 //absolute values collected at previus sample, needed for calculatinh CPU percentage over time
-ULONGLOBG m_prevCpuIdleTime = 0;
-ULONGLOBG m_prevCpuKernelTime = 0;
-ULONGLOBG m_prevCpuUserTime = 0;
-ULONGLOBG m_prevCpuTotalTime = 0;
+ULONGLONG m_prevCpuIdleTime = 0;
+ULONGLONG m_prevCpuKernelTime = 0;
+ULONGLONG m_prevCpuUserTime = 0;
+ULONGLONG m_prevCpuTotalTime = 0;
 
-ULONGLOBG m_prevDiskReadBytes = 0; //for calculatin disk isage rates
-ULONGLOBG m_prevDiskWriteBytes = 0;
-bool InitializePdhCounters();
-void GetRawCpuTimes(ULONGLOBG& idle, ULONGLOBG& kernel, ULONGLOBG& user, ULONGLOBG& total);
+ULONGLONG m_prevDiskReadBytes = 0; //for calculatin disk isage rates
+ULONGLONG m_prevDiskWriteBytes = 0;
 
+/////////////////////////////PRIVATE METHODS TO CALCULATE SYSTEM USAGE ///////////////////////////
+bool InitializePdhCounters(); // call PdhOpenQuery
+/////////helper functions for InitializePdhCounters////////
+bool SetUpCpuQuery();
+bool SetUpMemoryQuery();
+bool SetUpDiskQuery();
+bool PerformInitialPhdCollect();
+bool CaptureInitialCpuTimes();
+//////////////////////////////////////////////////////////
+
+void GetRawCpuTimes(ULONGLONG& idle, ULONGLONG kernel, ULONGLONG& user, ULONGLONG& total);
+ULONGLONG FileTimeToUNLONGLONG(const FIILETIME& ft);
 
 };
-#endif //_WINN32
+//#endif //_WINN32
 
 
 #endif //WindowsCollector
