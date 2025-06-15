@@ -4,6 +4,8 @@
 #include "ICollector.hpp" //collecting data
 #include <string>
 
+namespace CollectDAta
+{
 class LinuxCollector : ICollector
 {
 public:
@@ -13,8 +15,11 @@ public:
 
 
 private:
+//private members and helper methods to collect data about:
+//cpu, memory, disk space
 
 
 };
+}
 
 #endif

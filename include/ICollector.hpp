@@ -1,6 +1,10 @@
 #ifndef _ICollector_HPP_
 #define _ICollector_HPP_
+#include <string>
 
+
+namespace CollectDAta
+{
 class ICollector
 {
 public:
@@ -14,5 +18,6 @@ private:
 
 
 };
+}
 
 #endif

@@ -7,13 +7,15 @@
 #include <functional> //std::function
 #include <chrono>     //time calculations
 //windows specific includes
-//#ifdef _WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include <pdh.h>
 #pragma comment(lib, "pdh.lib") //link with pdh.lib
 
 #include "ICollector.hpp"
 
+namespace CollectDAta
+{
 struct PdhQuetDeleter //PDH: Performance Data Helper.
 {
     void operator()(PDH_HQUERY queryHandle) const
@@ -72,12 +74,20 @@ bool SetUpDiskQuery();
 bool PerformInitialPhdCollect();
 bool CaptureInitialCpuTimes();
 //////////////////////////////////////////////////////////
+/////////helper functions for CollectDAta() Mehotd////////
+double CollectCpuPercantageData();
+double CollectAvailableMemoryBytesData();
+DiskIOData CollectDiskIoBytesPerSecData();
 
+
+
+///helper functions to get raw CPU times and convert FILETIME to UNLONGLONG
 void GetRawCpuTimes(ULONGLONG& idle, ULONGLONG kernel, ULONGLONG& user, ULONGLONG& total);
 ULONGLONG FileTimeToUNLONGLONG(const FIILETIME& ft);
 
 };
-//#endif //_WINN32
+}
+#endif //_WINN32
 
 
 #endif //WindowsCollector
