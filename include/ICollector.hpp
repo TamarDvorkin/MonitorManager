@@ -3,7 +3,7 @@
 #include <string>
 
 
-namespace CollectDAta
+namespace CollectData
 {
 class ICollector
 {

@@ -14,9 +14,9 @@
 
 #include "ICollector.hpp"
 
-namespace CollectDAta
+namespace CollectData
 {
-struct PdhQuetDeleter //PDH: Performance Data Helper.
+struct PdhQuetDeleter //PDH: Performance Data Helper. //every class in namespace can use this struct
 {
     void operator()(PDH_HQUERY queryHandle) const
     {
